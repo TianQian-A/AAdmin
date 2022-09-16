@@ -1,0 +1,10 @@
+/**
+  自定义 element-plus 的主题
+ */
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+  $menu: (
+    'text-color': #FFF,
+    'bg-color': #313640,
+    'hover-bg-color': mix( #FFF, #313640, 10 ),
+  )
+);

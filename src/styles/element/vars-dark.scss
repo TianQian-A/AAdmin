@@ -1,0 +1,25 @@
+///**
+//  自定义 element-plus 深色的主题
+// */
+@use "element-plus/theme-chalk/dark/css-vars.css";
+@mixin set-css-var($list) {
+  @each $name, $variables in $list {
+      @each $attribute, $value in $variables {
+        @if $attribute == 'default' {
+          --el-#{$name}: #{$value};
+        } @else {
+          --el-#{$name}-#{$attribute}: #{$value};
+        }
+      }
+  }
+}
+$var-list: (
+        menu: (
+                'text-color': #FFF,
+                'bg-color': #313640,
+                'hover-bg-color': mix( #FFF, #313640, 10 ),
+        )
+);
+html.dark {
+  @include set-css-var($var-list)
+}
