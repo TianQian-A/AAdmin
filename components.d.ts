@@ -7,7 +7,12 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AImage: typeof import('./src/components/AImage/AImage.vue')['default']
+    ASearch: typeof import('./src/components/ASearch/ASearch.vue')['default']
+    ASearchForm: typeof import('./src/components/ASearch/ASearchForm.vue')['default']
+    ASearchFormItem: typeof import('./src/components/ASearch/components/ASearchFormItem.vue')['default']
     ATable: typeof import('./src/components/ATable/ATable.vue')['default']
+    ATablePro: typeof import('./src/components/ATablePro/ATablePro.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
@@ -19,19 +24,31 @@ declare module '@vue/runtime-core' {
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElIcon: typeof import('element-plus/es')['ElIcon']
+    ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMain: typeof import('element-plus/es')['ElMain']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
+    ElOption: typeof import('element-plus/es')['ElOption']
+    ElPagination: typeof import('element-plus/es')['ElPagination']
+    ElPopover: typeof import('element-plus/es')['ElPopover']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
+    ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
-    ElUpload: typeof import('element-plus/es')['ElUpload']
+    ElTabPane: typeof import('element-plus/es')['ElTabPane']
+    ElTabs: typeof import('element-plus/es')['ElTabs']
+    ElTag: typeof import('element-plus/es')['ElTag']
     IconUilLeftIndentAlt: typeof import('~icons/uil/left-indent-alt')['default']
     IconUilRightIndentAlt: typeof import('~icons/uil/right-indent-alt')['default']
     IconUilWindowGrid: typeof import('~icons/uil/window-grid')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ThePage403: typeof import('./src/components/StaticPages/ThePage403.vue')['default']
+    ThePage404: typeof import('./src/components/StaticPages/ThePage404.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

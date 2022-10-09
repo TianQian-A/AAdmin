@@ -1,5 +1,5 @@
 export default {
-	baseUrl: "192.168.1.1",
+	baseURL: import.meta.env.VITE_API_URL,
 	timeout: 5000,
 	withCredentials: true,
 };

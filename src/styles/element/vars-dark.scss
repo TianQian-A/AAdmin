@@ -18,8 +18,11 @@ $var-list: (
                 'text-color': #FFF,
                 'bg-color': #313640,
                 'hover-bg-color': mix( #FFF, #313640, 10 ),
-        )
+        ),
 );
 html.dark {
-  @include set-css-var($var-list)
+  @include set-css-var($var-list);
+  .el-table {
+    --el-table-header-bg-color: #252626;
+  }
 }

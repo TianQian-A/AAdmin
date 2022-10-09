@@ -10,7 +10,7 @@ const isDark = useDark({
 const toggleDark = useToggle(isDark);
 </script>
 <template>
-	<div class="dark-switch cursor-pointer transition-all bg-gray-200 dark:bg-gray-700" @click="toggleDark()">
+	<div class="dark-switch cursor-pointer transition-all bg-gray-200 dark:bg-gray-700 select-none" @click="toggleDark()">
 		<div class="dark-switch-action flex-center bg-white transition-all dark:bg-black dark:translate-x-[18px]">
 			<el-icon class="transition-none" size="14px">
 				<component :is="isDark ? UilMoon : UilSun"></component>

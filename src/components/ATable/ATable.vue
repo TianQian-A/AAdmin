@@ -1,38 +1,69 @@
 <script setup lang="ts">
-import { ElTableAttrs, ElTableEvent, ATableColumn } from "@/types/ATable";
+import { ATableType } from "@/types/aTable";
+import { ref } from "vue";
+import AImage from "@/components/AImage/AImage.vue";
+import { findEnum } from "@/utils/util";
 interface ATableProps {
-	tableAttrs?: ElTableAttrs,
-	tableEvent?: ElTableEvent,
-	columns: ATableColumn[],
+	tableData: any[];
+	tableAttrs?: ATableType.TableAttrs;
+	tableEvent?: ATableType.TableEvent;
+	columns: ATableType.Column[];
 }
-const props = withDefaults(defineProps<ATableProps>(), {
+withDefaults(defineProps<ATableProps>(), {
+	tableData: () => [],
 	tableAttrs: () => ({}),
 	tableEvent: () => ({}),
-	columns: () => ([]),
+	columns: () => [],
 });
-const tableData = [ { name: 23 } ];
+// elTable 组件实例
+const elTableRef = ref();
+// 匹配字典
+const matchEnum = (row: any, aColumn: ATableType.Column) => {
+	return findEnum(row[aColumn.columnAttrs.prop!], aColumn.enums || []);
+};
 </script>
 <template>
-	<el-table
-		ref="elTable"
-		:data="tableData"
-		border
-		stripe
-		v-bind="props.tableAttrs"
-		v-on="props.tableEvent"
-	>
-		<el-table-column
-			v-for="(column, index) in props.columns"
-			:key="index"
-			v-bind="column.columnAttrs"
-		>
-			<template v-if="column.renderColumn" #default="{ row, column: elColumn }">
-				<component :is="column.renderColumn({ row, elColumn, column })"></component>
-			</template>
-			<template v-if="column.renderHeader" #header="{ column: elColumn }">
-				<component :is="column.renderHeader({ column, elColumn })"></component>
-			</template>
-		</el-table-column>
-	</el-table>
+	<div class="table-wrap">
+		<slot name="head"></slot>
+		<ElTable ref="elTableRef" :data="tableData" border v-bind="tableAttrs" v-on="tableEvent">
+			<ElTableColumn v-for="(aColumn, index) in columns" :key="index" v-bind="aColumn.columnAttrs">
+				<template
+					v-if="aColumn.columnAttrs.type !== 'index' && aColumn.columnAttrs.type !== 'selection'"
+					#default="{ row, column: elColumn }"
+				>
+					<template v-if="aColumn.renderColumn">
+						<component :is="aColumn.renderColumn({ row, elColumn, aColumn })"></component>
+					</template>
+					<template v-else>
+						<!-- 动态插槽 -->
+						<slot :name="aColumn.columnAttrs.prop" :row="row" :column="aColumn" :elColumn="elColumn">
+							<template v-if="aColumn.type === 'tag'">
+								<ElTag :type="matchEnum(row, aColumn).tagType">
+									{{ matchEnum(row, aColumn).label }}
+								</ElTag>
+							</template>
+							<template v-else-if="aColumn.type === 'image'">
+								<AImage :url="row[aColumn.columnAttrs.prop] || ''" v-bind="aColumn.imageConfig"></AImage>
+							</template>
+							<template v-else>
+								<span>{{ matchEnum(row, aColumn).label }}</span>
+							</template>
+						</slot>
+					</template>
+				</template>
+				<template v-if="aColumn.renderHeader" #header="{ column: elColumn }">
+					<component :is="aColumn.renderHeader({ aColumn, elColumn })"></component>
+				</template>
+			</ElTableColumn>
+		</ElTable>
+		<slot name="foot"></slot>
+	</div>
 </template>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.table-wrap {
+	@apply flex flex-1 flex-col h-full;
+	.el-table {
+		height: 100%;
+	}
+}
+</style>

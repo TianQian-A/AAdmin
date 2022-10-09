@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import defaultConfig from "./defaultConfig";
 import { handleRequestResolve, handleRequestReject } from "@/http/helpers/handleRequest";
 import { handleResponseReject, handleResponseResolve } from "@/http/helpers/handleResponse";
-import { ResultData } from "@/http/type/interface";
+import { HttpType } from "./type/httpType";
 export class Http {
 	service: AxiosInstance;
 	constructor(config: AxiosRequestConfig) {
@@ -12,14 +12,14 @@ export class Http {
 		// 响应拦截
 		this.service.interceptors.response.use(handleResponseResolve, handleResponseReject);
 	}
-	post<T>(url: string, data?: object): Promise<ResultData<T>> {
-		return this.service.post(url, data);
+	post<T>(url: string, data?: object, config?: AxiosRequestConfig): Promise<HttpType.ResultData<T>> {
+		return this.service.post(url, data, config);
 	}
-	get<T>(url: string, params?: object): Promise<ResultData<T>> {
-		return this.service.get(url, { params });
+	get<T>(url: string, params?: object, config?: AxiosRequestConfig): Promise<HttpType.ResultData<T>> {
+		return this.service.get(url, { params, ...config });
 	}
-	delete<T>(url: string, params?: object): Promise<ResultData<T>> {
-		return this.service.delete(url, params);
+	delete<T>(url: string, params?: object, config?: AxiosRequestConfig): Promise<HttpType.ResultData<T>> {
+		return this.service.delete(url, { params, ...config });
 	}
 }
 export const httpInstance = new Http(defaultConfig);

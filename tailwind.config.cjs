@@ -7,6 +7,9 @@ module.exports = {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
     "./src/**/**/*.{vue,js,ts,jsx,tsx}",
   ],
+  safelist: [
+    ".el-button"
+  ],
   theme: {
     extend: {
       colors: {

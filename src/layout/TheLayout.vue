@@ -1,21 +1,28 @@
+<script lang="ts">
+export default {
+	name: "TheLayout",
+};
+</script>
 <script setup lang="ts">
-import Header from "@/layout/Header/TheHeader.vue";
-import Menu from "@/layout/Menu/TheMenu.vue";
+import TheHeader from "@/layout/Header/TheHeader.vue";
+import TheMenu from "@/layout/Menu/TheMenu.vue";
+import TheTabs from "@/layout/Tabs/TheTabs.vue";
 </script>
 <template>
-	<el-container>
-		<el-aside>
-			<Menu></Menu>
-		</el-aside>
-		<el-container>
-			<el-header>
-				<Header></Header>
-			</el-header>
-			<el-main>
-				<router-view></router-view>
-			</el-main>
-		</el-container>
-	</el-container>
+	<ElContainer>
+		<ElAside>
+			<TheMenu />
+		</ElAside>
+		<ElContainer>
+			<ElHeader>
+				<TheHeader />
+				<TheTabs />
+			</ElHeader>
+			<ElMain>
+				<RouterView></RouterView>
+			</ElMain>
+		</ElContainer>
+	</ElContainer>
 </template>
 <style lang="scss" scoped>
 .el-container {
@@ -29,5 +36,4 @@ import Menu from "@/layout/Menu/TheMenu.vue";
 		height: auto;
 	}
 }
-
 </style>

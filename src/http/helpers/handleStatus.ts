@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import { HttpType } from "../type/httpType";
 
 const statusMap = new Map([
 	[ 400, "请求失败！请您稍后重试" ],
@@ -10,7 +11,7 @@ const statusMap = new Map([
 	[ 503, "服务不可用！" ],
 	[ 504, "网关超时！" ]
 ]);
-export function handleStatus(response: AxiosResponse) {
+export function handleStatus(response: AxiosResponse): HttpType.ErrorInfo {
 	const { status } = response;
 	const statusText = statusMap.get(status) || "请求失败";
 	return { msg: statusText };

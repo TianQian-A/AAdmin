@@ -1,11 +1,13 @@
 import { AxiosError, AxiosRequestConfig } from "axios";
-import { pickBy, isEmpty, isObject } from "lodash-es";
+import { ElMessage } from "element-plus";
+import { HttpType } from "../type/httpType";
+import { useCookies } from "@vueuse/integrations/useCookies";
 export function handleRequestResolve(config: AxiosRequestConfig) {
-	// 过滤请求参数的空值
-	if (isObject(config.data)) config.data = pickBy(config.data, isEmpty);
-	if (isObject(config.params)) config.params = pickBy(config.params, isEmpty);
+	config.headers = { ...config.headers, access_token: useCookies().get("token") };
 	return config;
 }
-export function handleRequestReject(error: AxiosError) {
-	return Promise.reject(error);
+export function handleRequestReject(error: AxiosError): Promise<HttpType.ErrorInfo> {
+	const errorInfo: HttpType.ErrorInfo = {  msg: error.message };
+	ElMessage.error(errorInfo.msg);
+	return Promise.reject(errorInfo);
 }

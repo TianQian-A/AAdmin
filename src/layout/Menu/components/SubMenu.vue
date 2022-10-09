@@ -1,23 +1,39 @@
-<script>
-import { defineComponent } from "vue";
-export default defineComponent({
+<script lang="ts">
+export default {
 	name: "SubMenu",
-});
+};
 </script>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ApiMenu } from "@/http/apis/menu";
+import { useRouter } from "vue-router";
+const router = useRouter();
+interface SubMenuProp {
+	menuList: ApiMenu.ResMenuItem[];
+}
+const props = withDefaults(defineProps<SubMenuProp>(), {
+	menuList: () => [],
+});
+const handleClickMenuItem = (menuItem: ApiMenu.ResMenuItem) => {
+	router.push(menuItem.url);
+};
+</script>
 <template>
-	<el-sub-menu index="1">
-		<template #title>
-			<el-icon><location /></el-icon>
-			<span>Navigator One</span>
-		</template>
-		<el-menu-item index="1-1">item one</el-menu-item>
-		<el-menu-item index="1-2">item one</el-menu-item>
-		<el-menu-item index="1-3">item three</el-menu-item>
-		<el-sub-menu index="1-4">
-			<template #title>item four</template>
-			<el-menu-item index="1-4-1">item one</el-menu-item>
-		</el-sub-menu>
-	</el-sub-menu>
+	<template v-for="subItem in props.menuList" :key="subItem.menuId">
+		<ElSubMenu v-if="subItem.children && subItem.children.length > 0" :index="String(subItem.menuId)">
+			<template #title>
+				<ElIcon>
+					<component v-if="subItem.styleCode" :is="subItem.styleCode"></component>
+				</ElIcon>
+				<span>{{ subItem.menuName }}</span>
+			</template>
+			<SubMenu :menuList="subItem.children"></SubMenu>
+		</ElSubMenu>
+		<ElMenuItem v-else :index="String(subItem.menuId)" @click="handleClickMenuItem(subItem)">
+			<ElIcon>
+				<component v-if="subItem.styleCode" :is="subItem.styleCode"></component>
+			</ElIcon>
+			<span>{{ subItem.menuName }}</span>
+		</ElMenuItem>
+	</template>
 </template>
 <style lang="scss" scoped></style>

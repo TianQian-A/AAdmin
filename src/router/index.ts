@@ -1,9 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-import staticRoutes from "./staticRoutes";
-import { beforeEach } from "./guard";
-const router = createRouter({
-	history: createWebHashHistory(),
-	routes: staticRoutes,
-});
-router.beforeEach(beforeEach);
+import router from "@/router/config/router";
+import { guardBeforeEach } from "@/router/config/guard";
+router.beforeEach(guardBeforeEach);
 export default router;
