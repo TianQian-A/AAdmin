@@ -37,12 +37,18 @@ export const useStoreTabs = defineStore(
 			}
 			tabList.value.splice(index, 1);
 		};
+		// 清除 tab
+		const clearTab = () => {
+			curTabValue.value = "";
+			tabList.value = [];
+		};
 		return {
 			curTabValue,
 			setTabValue,
 			tabList,
 			addTab,
 			removeTab,
+			clearTab,
 		};
 	},
 	{

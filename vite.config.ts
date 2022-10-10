@@ -1,6 +1,7 @@
 import { resolve } from "path";
-import {defineConfig} from "vite";
+import {defineConfig, loadEnv} from "vite";
 import vue from "@vitejs/plugin-vue";
+import { createHtmlPlugin } from "vite-plugin-html";
 // 支持 jsx
 import vueJsx from '@vitejs/plugin-vue-jsx'
 // 使图标可作为组件来使用
@@ -14,6 +15,7 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
+	const env = loadEnv(mode, process.cwd());
 	return {
 		resolve: {
 			alias: {
@@ -38,6 +40,14 @@ export default defineConfig(({mode}) => {
 				autoInstall: true,
 				compiler: "vue3",
 			}),
+			createHtmlPlugin({
+				minify: true,
+				inject: {
+					data: {
+						title: env.VITE_HTML_TITLE
+					}
+				}
+			})
 		],
 		css: {
 			preprocessorOptions: {

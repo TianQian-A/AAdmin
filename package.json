@@ -13,6 +13,7 @@
     "@vueuse/core": "^9.1.0",
     "@vueuse/integrations": "^9.2.0",
     "axios": "^0.27.2",
+    "dayjs": "^1.11.5",
     "element-plus": "^2.2.16",
     "lodash-es": "^4.17.21",
     "pinia": "^2.0.18",
@@ -43,6 +44,7 @@
     "unplugin-icons": "^0.14.8",
     "unplugin-vue-components": "^0.22.4",
     "vite": "^3.0.0",
+    "vite-plugin-html": "^3.2.0",
     "vue-tsc": "^0.38.4"
   }
 }
