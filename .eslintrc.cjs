@@ -21,6 +21,9 @@ module.exports = {
 		}
 	},
 	plugins: ["vue", "@typescript-eslint"],
+	globals: {
+		AMap: true
+	},
 	rules: {
 		// "no-undef": "off",
 		"no-var": "error", // 不允许使用 var

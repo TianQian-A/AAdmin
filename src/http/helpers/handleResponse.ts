@@ -3,21 +3,21 @@ import { AxiosError, AxiosResponse } from "axios";
 import { handleStatus } from "@/http/helpers/handleStatus";
 import { HttpType } from "../type/httpType";
 import router from "@/router";
+import { has } from "lodash-es";
 // 响应成功的拦截函数
 export function handleResponseResolve(res: AxiosResponse<HttpType.ResultData>) {
 	const { data } = res;
-	// 响应成功
-	if (data.code === HttpType.ResultCodeEnum.SUCCESS) {
-		return Promise.resolve(data);
-	}
 	// 登录失效
 	if (data.code === HttpType.ResultCodeEnum.OVERDUE) {
 		router.replace({
-			name: "login"
+			name: "login",
 		});
 	}
-	ElMessage.error(data.msg);
-	return Promise.reject(data);
+	if (has(data, "code") && data.code !== HttpType.ResultCodeEnum.SUCCESS) {
+		ElMessage.error(data.msg);
+		return Promise.reject(data);
+	}
+	return Promise.resolve(data);
 }
 // 响应错误的拦截函数
 export function handleResponseReject(error: AxiosError) {

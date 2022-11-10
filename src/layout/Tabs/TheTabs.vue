@@ -14,7 +14,7 @@ watch(
 		tabStore.addTab(route);
 	},
 	{
-		immediate: true
+		immediate: true,
 	}
 );
 const handleClick = (tab: TabsPaneContext) => {
@@ -26,23 +26,13 @@ const handleRemove = (tabPanelName: string) => {
 </script>
 <template>
 	<div class="tab-wrap">
-		<ElTabs
-			v-model="curTabValue"
-			type="card"
-			@tab-click="handleClick"
-			@tab-remove="handleRemove"
-		>
-			<ElTabPane
-				v-for="tab in tabList"
-				:key="tab.fullPath"
-				:name="tab.fullPath"
-				:closable="tab.fullPath !== '/home'"
-			>
+		<ElTabs v-model="curTabValue" type="card" @tab-click="handleClick" @tab-remove="handleRemove">
+			<ElTabPane v-for="tab in tabList" :key="tab.fullPath" :name="tab.fullPath" :closable="tab.fullPath !== '/home'">
 				<template #label>
 					<ElIcon class="top-0.5 mr-0.5" v-if="tab.meta.icon">
 						<component :is="tab.meta.icon"></component>
 					</ElIcon>
-					<span>{{tab.meta.menuName}}</span>
+					<span>{{ tab.meta.menuName }}</span>
 				</template>
 			</ElTabPane>
 		</ElTabs>

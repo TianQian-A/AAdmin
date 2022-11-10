@@ -8,7 +8,7 @@ import "@/styles/tailwind.scss";
 import "@/styles/element/vars-dark.scss";
 // element-plus 的所有图标组件
 import * as Icons from "@element-plus/icons-vue";
-
+import "@amap/amap-jsapi-types";
 const app = createApp(App);
 // 注册 element-plus 的图标
 Object.keys(Icons).forEach((key) => {

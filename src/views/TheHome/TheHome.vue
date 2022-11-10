@@ -8,7 +8,7 @@ import { ATableType } from "@/types/aTable";
 import ATablePro from "@/components/ATablePro/ATablePro.vue";
 import { ApiHotspot } from "@/http/apis/hotspot";
 import { TableRequestConfig } from "@/hooks/useTableRequest";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const aTablePro = ref<InstanceType<typeof ATablePro> | null>(null);
 const columns: ATableType.Column[] = [

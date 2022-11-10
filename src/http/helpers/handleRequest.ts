@@ -7,7 +7,7 @@ export function handleRequestResolve(config: AxiosRequestConfig) {
 	return config;
 }
 export function handleRequestReject(error: AxiosError): Promise<HttpType.ErrorInfo> {
-	const errorInfo: HttpType.ErrorInfo = {  msg: error.message };
+	const errorInfo: HttpType.ErrorInfo = { msg: error.message };
 	ElMessage.error(errorInfo.msg);
 	return Promise.reject(errorInfo);
 }

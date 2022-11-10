@@ -1,5 +1,3 @@
-import { httpInstance } from "@/http";
-import qs from "qs";
 import { HttpType } from "@/http/type/httpType";
 export namespace ApiMenu {
 	export interface ResMenuItem {
