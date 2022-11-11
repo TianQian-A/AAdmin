@@ -26,18 +26,22 @@ const getSuccessTitle = () => {
  * 提交表单
  * @param loginForm 表单数据
  */
-const submitLoginForm = (loginForm: ApiUser.RequestLoginPassword) => {
+const submitLoginForm = (loginForm: ApiUser.ReqLoginPassword) => {
 	onLogin.value = true;
-	ApiUser.login(toRaw(loginForm)).then((res) => {
-		authStore.login(res.data.access_token, res.data);
-		ElNotification.success({
-			title: getSuccessTitle(),
-			message: "欢迎使用智慧导览系统",
+	ApiUser.login(toRaw(loginForm))
+		.then((res) => {
+			authStore.login(res.data.access_token, res.data);
+			ElNotification.success({
+				title: getSuccessTitle(),
+				message: "欢迎使用智慧导览系统",
+			});
+			router.replace({
+				name: "home",
+			});
+		})
+		.finally(() => {
+			onLogin.value = false;
 		});
-		router.replace({
-			name: "home",
-		});
-	});
 };
 </script>
 <template>
@@ -47,7 +51,7 @@ const submitLoginForm = (loginForm: ApiUser.RequestLoginPassword) => {
 				<div class="login-form-card__title">
 					欢迎使用，<br /><span class="text-right">金华民宿美食智慧导览系统</span>
 				</div>
-				<LoginForm @submit="submitLoginForm"></LoginForm>
+				<LoginForm @submit="submitLoginForm" :on-login="onLogin"></LoginForm>
 				<!--				<div class="flex-center-between text-sm mt-6">-->
 				<!--					<div>没有账号？去<span class="login-form-card__link">注册</span></div>-->
 				<!--					<span class="login-form-card__link">忘记密码？</span>-->

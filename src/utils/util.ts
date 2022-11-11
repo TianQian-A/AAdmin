@@ -1,5 +1,4 @@
 import { ATableType } from "@/types/aTable";
-import { MessageBox } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 /**
  * 树结构扁平化

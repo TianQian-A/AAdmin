@@ -14,6 +14,7 @@ export const useStoreMenu = defineStore("menu", () => {
 	 */
 	const dynamicMenuFlatted = computed(() =>
 		treeToArray(dynamicMenuList.value, "children", (treeItem) => {
+			treeItem.styleCode = "Grid";
 			if (treeItem.url === "#") return;
 			treeItem.url =
 				"/" +
@@ -30,8 +31,8 @@ export const useStoreMenu = defineStore("menu", () => {
 	const initDynamicMenus = async () => {
 		const authStore = useStoreAuth();
 		dynamicMenuList.value = await ApiMenu.initMenu({ mid: authStore.userInfo.id }).then((res) => {
-			formatUrl(res.data);
-			return res.data;
+			formatUrl(res.data.menus);
+			return res.data.menus;
 		});
 		addDynamicMenus();
 		hasInitDynamicMenu.value = true;
@@ -48,7 +49,7 @@ export const useStoreMenu = defineStore("menu", () => {
 					menu.url
 						.split("/")
 						.filter((item) => !!item)
-						.map((item: string) => item.charAt(0).toUpperCase() + item.slice(1))
+						.map((item: string) => "The" + item.charAt(0).toUpperCase() + item.slice(1))
 						.join("/");
 			}
 			if (menu?.children?.length) formatUrl(menu.children);

@@ -31,28 +31,33 @@ const matchEnum = (row: any, aColumn: ATableType.Column) => {
 					v-if="aColumn.columnAttrs.type !== 'index' && aColumn.columnAttrs.type !== 'selection'"
 					#default="{ row, column: elColumn }"
 				>
+					<!-- 自定义渲染单元格 -->
 					<template v-if="aColumn.renderColumn">
 						<component :is="aColumn.renderColumn({ row, elColumn, aColumn })"></component>
 					</template>
 					<template v-else>
 						<!-- 动态插槽 -->
 						<slot :name="aColumn.columnAttrs.prop" :row="row" :column="aColumn" :elColumn="elColumn">
+							<!-- 标签样式 -->
 							<template v-if="aColumn.type === 'tag'">
 								<ElTag :type="matchEnum(row, aColumn).tagType">
 									{{ matchEnum(row, aColumn).label }}
 								</ElTag>
 							</template>
+							<!-- 图片样式 -->
 							<template v-else-if="aColumn.type === 'image'">
-								<AImage :url="row[aColumn.columnAttrs.prop] || ''" v-bind="aColumn.imageConfig"></AImage>
+								<AImage :url="aColumn.imageConfig!.url" v-bind="aColumn.imageConfig"></AImage>
 							</template>
+							<!-- 普通文本，支持 enum -->
 							<template v-else>
 								<span>{{ matchEnum(row, aColumn).label }}</span>
 							</template>
 						</slot>
 					</template>
 				</template>
+				<!-- 自定义渲染列表头 -->
 				<template v-if="aColumn.renderHeader" #header="{ column: elColumn }">
-					<component :is="aColumn.renderHeader({ aColumn, elColumn })"></component>
+					<component :is="aColumn.renderHeader!({ aColumn, elColumn })"></component>
 				</template>
 			</ElTableColumn>
 		</ElTable>

@@ -1,7 +1,7 @@
 import type { ElTable, ElTableColumn } from "element-plus";
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import { CamelCase } from "@/types/custom";
-import {AImage} from "@/types/aImage";
+import { AImage } from "@/types/aImage";
 export namespace ATableType {
 	/**
 	 * ElTable 实例类型
@@ -17,7 +17,7 @@ export namespace ATableType {
 	 * ElTable 的事件类型
 	 */
 	type ElTableEventName =
-		"select"
+		| "select"
 		| "select-all"
 		| "expand-change"
 		| "current-change"
@@ -53,21 +53,21 @@ export namespace ATableType {
 	 * 字典值对象
 	 */
 	export type EnumItem = {
-		label: string
-		value: string | number
-		tagType?: 'danger' | 'success' | 'primary' | 'warning' | 'info'
-	}
-	type ColumnType = 'tag' | 'image';
-	type ColumnSearchType = 'input' | 'select';
+		label: string;
+		value: string | number;
+		tagType?: "danger" | "success" | "primary" | "warning" | "info";
+	};
+	type ColumnType = "tag" | "image";
+	type ColumnSearchType = "input" | "select";
 
 	/**
 	 * 自定义渲染列的参数
 	 */
 	export interface ColumnRenderArg<T> {
-		aColumn: Column
-		elColumn: TableColumnCtx<any>
-		row: T
-		$index?: number
+		aColumn: Column;
+		elColumn: TableColumnCtx<any>;
+		row: T;
+		$index?: number;
 	}
 
 	/**
@@ -77,60 +77,64 @@ export namespace ATableType {
 		/**
 		 * ElTableColumn 的 Props
 		 */
-		columnAttrs: ColumnAttrs
+		columnAttrs: ColumnAttrs;
 		/**
 		 * 列的类型
 		 */
-		type?: ColumnType
+		type?: ColumnType;
 		/**
 		 * 列的字典
 		 */
-		enums?: EnumItem[]
+		enums?: EnumItem[];
 		/**
 		 * 可搜索列
 		 */
 		search?: {
-			type: ColumnSearchType
+			type: ColumnSearchType;
 			/**
 			 * 搜索组件的穿透属性
 			 */
-			attrs?: Record<string, any>
+			attrs?: Record<string, any>;
 			/**
 			 * 搜索属性改变时的钩子函数
 			 */
-			changeHook?: (params: any) => any
-		}
+			changeHook?: (params: any) => any;
+		};
 		/**
 		 * 自定义列渲染函数
 		 */
-		renderColumn?: (scope: ColumnRenderArg) => any
+		renderColumn?: (scope: ColumnRenderArg) => any;
 		/**
 		 * 自定义列表头渲染函数
 		 */
-		renderHeader?: (scope: Omit<ColumnRenderArg, "row">) => any // 自定义列表头渲染函数
+		renderHeader?: (scope: Omit<ColumnRenderArg, "row">) => any; // 自定义列表头渲染函数
 		/**
 		 * 当列的 type 是 image 时，图片配置选项
 		 */
-		imageConfig?: Omit<AImage.Props, "url">
+		imageConfig?: AImage.Props;
 	}
 
 	/**
 	 * 标签类型的列
 	 */
 	interface ColumnTag extends ColumnBase {
-		type: 'tag'
-		enums: EnumItem[]
+		type: "tag";
+		// enums: EnumItem[];
+	}
+	interface ColumnImage extends ColumnBase {
+		type: "image";
+		imageConfig: AImage.Props;
 	}
 
 	/**
 	 * ATable 的 column 对象
 	 */
-	export type Column =  ColumnBase | ColumnTag;
+	export type Column = ColumnBase | ColumnTag | ColumnImage;
 
 	export type Props = {
-		tableData: any[]
-		tableAttrs?: TableAttrs
-		tableEvent?: TableEvent
-		columns: Column[]
-	}
+		tableData: any[];
+		tableAttrs?: TableAttrs;
+		tableEvent?: TableEvent;
+		columns: Column[];
+	};
 }
