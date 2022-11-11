@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { computed, reactive, Ref, ref, toRaw } from "vue";
-import type { ElForm as ElFormType } from "element-plus";
-import { User, Lock } from "@element-plus/icons-vue";
-import { ElNotification } from "element-plus";
+import { ref, toRaw } from "vue";
+import { ElConfigProvider, ElNotification } from "element-plus";
 import { ApiUser } from "@/http/apis/user";
-import { useCookies } from "@vueuse/integrations/useCookies";
 import { useStoreAuth } from "@/pinia/modules/auth";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
@@ -12,30 +9,11 @@ import isBetween from "dayjs/plugin/isBetween";
 import LoginForm from "@/views/TheLogin/components/LoginForm.vue";
 
 const router = useRouter();
-const cookie = useCookies(["token"]);
 const authStore = useStoreAuth();
-const loginType: Ref<"password" | "phone"> = ref("password");
 const onLogin = ref(false);
-// 表单验证相关
-const loginFormRef = ref<InstanceType<typeof ElFormType> | null>(null);
-const loginRules = reactive({
-	account: { required: true, message: "请输入账号" },
-	password: { required: true, message: "请输入密码" },
-});
-// 表单数据
-const loginFormPassword = reactive({
-	username: "",
-	password: "",
-	code: "",
-});
-const loginFormPhone = reactive({
-	phone: "",
-	code: "",
-});
-const loginForm = computed(() => {
-	if (loginType.value === "password") return loginFormPassword;
-	else return loginFormPhone;
-});
+/**
+ * 登录成功的提醒文案
+ */
 const getSuccessTitle = () => {
 	dayjs.extend(isBetween);
 	let now = dayjs();
@@ -44,21 +22,20 @@ const getSuccessTitle = () => {
 	else if (now.isBetween(now.hour(14), now.hour(18), "hour", "(]")) return "下午好 🌞";
 	else return "晚上好 🌛";
 };
-// 提交表单
-const submitLoginForm = () => {
-	loginFormRef.value?.validate((valid) => {
-		if (!valid) return;
-		onLogin.value = true;
-		ApiUser.login(toRaw(loginForm.value)).then((res) => {
-			cookie.set("token", res.data.access_token);
-			authStore.setUserInfo(res.data);
-			ElNotification.success({
-				title: getSuccessTitle(),
-				message: "欢迎使用实训系统",
-			});
-			router.replace({
-				name: "home",
-			});
+/**
+ * 提交表单
+ * @param loginForm 表单数据
+ */
+const submitLoginForm = (loginForm: ApiUser.RequestLoginPassword) => {
+	onLogin.value = true;
+	ApiUser.login(toRaw(loginForm)).then((res) => {
+		authStore.login(res.data.access_token, res.data);
+		ElNotification.success({
+			title: getSuccessTitle(),
+			message: "欢迎使用智慧导览系统",
+		});
+		router.replace({
+			name: "home",
 		});
 	});
 };
@@ -67,24 +44,10 @@ const submitLoginForm = () => {
 	<ElConfigProvider size="large">
 		<div class="login-bg">
 			<div class="login-form-card">
-				<div class="login-form-card__title">欢迎使用，<br /><span class="text-right">旅职院实训系统</span></div>
-				<LoginForm></LoginForm>
-				<!--				<ElForm ref="loginFormRef" :model="loginForm" :rules="loginRules">-->
-				<!--					<ElFormItem prop="username">-->
-				<!--						<ElInput v-model="loginForm.username" placeholder="输入账号" :prefix-icon="User" />-->
-				<!--					</ElFormItem>-->
-				<!--					<ElFormItem prop="password">-->
-				<!--						<ElInput-->
-				<!--							v-model="loginForm.password"-->
-				<!--							@keyup.enter="submitLoginForm"-->
-				<!--							type="password"-->
-				<!--							show-password-->
-				<!--							placeholder="输入密码"-->
-				<!--							:prefix-icon="Lock"-->
-				<!--						/>-->
-				<!--					</ElFormItem>-->
-				<!--				</ElForm>-->
-				<ElButton type="primary" round :loading="onLogin" @click="submitLoginForm">立即登录</ElButton>
+				<div class="login-form-card__title">
+					欢迎使用，<br /><span class="text-right">金华民宿美食智慧导览系统</span>
+				</div>
+				<LoginForm @submit="submitLoginForm"></LoginForm>
 				<!--				<div class="flex-center-between text-sm mt-6">-->
 				<!--					<div>没有账号？去<span class="login-form-card__link">注册</span></div>-->
 				<!--					<span class="login-form-card__link">忘记密码？</span>-->
@@ -105,7 +68,7 @@ const submitLoginForm = () => {
 	@apply rounded-lg shadow-2xl;
 	@apply flex flex-col justify-center shrink-0;
 	.login-form-card__title {
-		@apply text-3xl font-bold text-sky-700;
+		@apply text-3xl font-bold text-sky-700 whitespace-nowrap;
 		@apply mb-12;
 	}
 	.login-form-card__link {

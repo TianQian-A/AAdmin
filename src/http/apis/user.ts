@@ -1,32 +1,29 @@
 import { httpInstance } from "@/http";
 export namespace ApiUser {
-	interface RequestLoginPassword {
-		username: string;
+	export interface ReqLoginPassword {
+		account: string;
 		password: string;
-		code: string;
-	}
-	interface RequestLoginPhone {
-		phone: string;
-		code: string;
 	}
 	export interface ResLogin {
 		access_token: string;
 		id: number;
 		realName: string;
 	}
+	export interface ReqChangePassword {
+		id: number;
+		oldPassword: string;
+		newPassword: string;
+	}
 	/**
 	 * 用户登录
 	 */
-	export function login(data: RequestLoginPassword | RequestLoginPhone) {
+	export function login(data: ReqLoginPassword) {
 		return httpInstance.post<ResLogin>("/login", data);
 	}
-	export function captchaImage() {
-		return httpInstance.get(
-			"/captchaImage",
-			{},
-			{
-				responseType: "blob",
-			}
-		);
+	/**
+	 * 修改密码
+	 */
+	export function changePassword(data: ReqChangePassword) {
+		return httpInstance.post("/user/update/password", data);
 	}
 }

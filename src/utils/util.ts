@@ -1,4 +1,6 @@
 import { ATableType } from "@/types/aTable";
+import { MessageBox } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 /**
  * 树结构扁平化
  */
@@ -28,4 +30,35 @@ export const findEnum = (value: any, enums: ATableType.EnumItem[]): ATableType.E
 		if (item) res = item;
 	}
 	return res;
+};
+
+/**
+ * 请求操作确认框
+ */
+export const handleApiConfirm = <T extends (data?: any) => Promise<any>>(
+	api: T,
+	data: any,
+	confirmText = "操作"
+): Promise<ReturnType<T>> => {
+	return new Promise((resolve, reject) => {
+		ElMessageBox.confirm(`确认${confirmText}吗`, "提示", {
+			confirmButtonText: "确定",
+			cancelButtonText: "取消",
+			type: "warning",
+		})
+			.then(() => {
+				api(data)
+					.then((res) => {
+						ElMessage.success(`${confirmText}成功`);
+						resolve(res);
+					})
+					.catch((err) => {
+						ElMessage.error(err.msg);
+						reject(err);
+					});
+			})
+			.catch((err) => {
+				reject(err);
+			});
+	});
 };

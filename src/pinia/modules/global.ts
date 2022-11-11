@@ -5,7 +5,7 @@ export const useStoreGlobal = defineStore(
 	"global",
 	() => {
 		// element 组件大小
-		const elComponentSize: Ref<"default"|"small"|"large"> = ref("default");
+		const elComponentSize: Ref<"default" | "small" | "large"> = ref("default");
 		const changeElComponentSize = (size: UnwrapRef<typeof elComponentSize>): void => {
 			elComponentSize.value = size;
 		};
@@ -22,6 +22,6 @@ export const useStoreGlobal = defineStore(
 		};
 	},
 	{
-		persist: true
+		persist: true,
 	}
 );

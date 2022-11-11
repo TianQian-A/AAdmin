@@ -1,92 +1,42 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
-import { User, Lock, Phone, Message, Loading } from "@element-plus/icons-vue";
-import { ApiUser } from "@/http/apis/user";
+import { reactive, ref } from "vue";
+import { User, Lock } from "@element-plus/icons-vue";
+import { ElForm as ElFormType } from "element-plus/es/components/form";
 
 const emit = defineEmits(["submit"]);
-const props = withDefaults(defineProps<{ loginType: "password" | "phone" }>(), {
-	loginType: "password",
-});
-
+const loginFormRef = ref<InstanceType<typeof ElFormType> | null>(null);
 // 表单数据
 const loginFormPassword = reactive({
-	username: "",
+	account: "",
 	password: "",
-	code: "",
 });
-const loginFormPhone = reactive({
-	phone: "",
-	code: "",
-});
-const loginCaptchaImage = ref("");
 // 表单验证
-const loginRulesBase = {
-	code: { required: true, message: "请输入验证码" },
-};
 const loginRulesPassword = {
 	account: { required: true, message: "请输入账号" },
 	password: { required: true, message: "请输入密码" },
-	...loginRulesBase,
 };
-const loginRulesPhone = {
-	phone: { required: true, message: "请输入手机号" },
-	...loginRulesBase,
-};
-const loginRules = computed(() => {
-	if (props.loginType === "password") return loginRulesPassword;
-	return loginRulesPhone;
-});
-// 图形码
-const getCaptchaImage = () => {
-	ApiUser.captchaImage().then((res) => {
-		loginCaptchaImage.value = URL.createObjectURL(res as unknown as Blob);
-	});
-};
-getCaptchaImage();
 const submit = () => {
-	emit("submit");
+	loginFormRef.value?.validate((valid) => {
+		if (!valid) return;
+		emit("submit", loginFormPassword);
+	});
 };
 </script>
 <template>
-	<ElForm
-		ref="loginFormRef"
-		:model="loginType === 'password' ? loginFormPassword : loginRulesPhone"
-		:rules="loginRules"
-	>
-		<template v-if="loginType === 'password'">
-			<ElFormItem prop="username">
-				<ElInput v-model="loginFormPassword.username" placeholder="输入账号" :prefix-icon="User" />
-			</ElFormItem>
-			<ElFormItem prop="password">
-				<ElInput
-					v-model="loginFormPassword.password"
-					type="password"
-					show-password
-					placeholder="输入密码"
-					:prefix-icon="Lock"
-				/>
-			</ElFormItem>
-			<ElFormItem prop="code">
-				<ElInput v-model="loginFormPassword.code" placeholder="请输入验证码" :prefix-icon="Message">
-					<template #append>
-						<ElImage :src="loginCaptchaImage" class="w-[96px] h-[36px]" @click="getCaptchaImage">
-							<template #error>
-								<div class="flex-center w-full h-full">
-									<ElIcon>
-										<Loading />
-									</ElIcon>
-								</div>
-							</template>
-						</ElImage>
-					</template>
-				</ElInput>
-			</ElFormItem>
-		</template>
-		<template v-else>
-			<ElFormItem prop="phone">
-				<ElInput v-model="loginFormPhone.phone" placeholder="请输入手机号" :prefix-icon="Phone" />
-			</ElFormItem>
-		</template>
-	</ElForm>
+	<el-form ref="loginFormRef" :model="loginRulesPassword" :rules="loginRulesPassword">
+		<el-form-item prop="username">
+			<el-input v-model="loginFormPassword.account" placeholder="输入账号" :prefix-icon="User" />
+		</el-form-item>
+		<el-form-item prop="password">
+			<el-input
+				v-model="loginFormPassword.password"
+				type="password"
+				show-password
+				placeholder="输入密码"
+				:prefix-icon="Lock"
+			/>
+		</el-form-item>
+		<el-button class="w-full" type="primary" round @click="submit">立即登录</el-button>
+	</el-form>
 </template>
 <style lang="scss" scoped></style>

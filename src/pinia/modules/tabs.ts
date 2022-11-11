@@ -1,18 +1,21 @@
 import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
-import { RouteLocationNormalizedLoaded, useRouter } from "vue-router";
+import { RouteLocationNormalizedLoaded } from "vue-router";
 import { layout as homeRoute } from "@/router/modules/home";
 import { objectPick } from "@vueuse/core";
+import router from "@/router";
 type MenuItem = Pick<RouteLocationNormalizedLoaded, "fullPath" | "meta">;
 export const useStoreTabs = defineStore(
 	"tabs",
 	() => {
-		const router = useRouter();
+		// 首页 tab，固定不变
 		const homeTab: MenuItem = {
 			fullPath: "/home",
 			meta: homeRoute[0].meta!,
 		};
+		// 当前 tab 值
 		const curTabValue: Ref<RouteLocationNormalizedLoaded["fullPath"]> = ref("");
+		// tab 数组
 		const tabList: Ref<MenuItem[]> = ref([homeTab]);
 		// 添加 tab
 		const addTab = (route: RouteLocationNormalizedLoaded) => {
@@ -39,8 +42,8 @@ export const useStoreTabs = defineStore(
 		};
 		// 清除 tab
 		const clearTab = () => {
-			curTabValue.value = "";
-			tabList.value = [];
+			tabList.value = [homeTab];
+			curTabValue.value = homeTab.fullPath;
 		};
 		return {
 			curTabValue,

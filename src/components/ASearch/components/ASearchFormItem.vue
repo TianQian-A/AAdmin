@@ -25,10 +25,10 @@ const paramVal = computed({
 });
 </script>
 <template>
-	<template v-if="columnItem.search.type === 'input'">
+	<template v-if="columnItem.search?.type === 'input'">
 		<ElInput v-model="paramVal" clearable placeholder="请输入" v-bind="columnItem.search.attrs"></ElInput>
 	</template>
-	<template v-else-if="columnItem.search.type === 'select'">
+	<template v-else-if="columnItem.search?.type === 'select'">
 		<ElSelect v-model="paramVal" clearable placeholder="请选择" v-bind="columnItem.search.attrs">
 			<ElOption v-for="item in columnItem.enums" :key="item.value" :label="item.value" :value="item.value"></ElOption>
 		</ElSelect>

@@ -75,10 +75,18 @@ export const useStoreMenu = defineStore("menu", () => {
 			router.addRoute("layout", route);
 		});
 	};
+	/**
+	 * 清除所有菜单
+	 */
+	const clearMenu = () => {
+		hasInitDynamicMenu.value = false;
+		dynamicMenuList.value = [];
+	};
 	return {
 		hasInitDynamicMenu,
 		dynamicMenuList,
 		dynamicMenuFlatted,
 		initDynamicMenus,
+		clearMenu,
 	};
 });
