@@ -4,10 +4,10 @@ import DialogFootButton from "@/components/DialogFootButton/DialogFootButton.vue
 import { Rules } from "async-validator";
 import { ElForm } from "element-plus";
 import { ApiUser } from "@/http/apis/user";
-import { handleApiConfirm } from "@/utils/util";
 import { reactiveOmit } from "@vueuse/core";
 import { useStoreAuth } from "@/pinia/modules/auth";
 import { storeToRefs } from "pinia";
+import { useApiConfirm } from "@/hooks";
 
 const { userInfo } = storeToRefs(useStoreAuth());
 const loading = ref(false);
@@ -45,6 +45,7 @@ const rules: Rules = {
 		},
 	},
 };
+const { apiLoading, apiConfirm } = useApiConfirm(ApiUser.changePassword);
 /**
  * 确认修改密码
  */
@@ -55,14 +56,9 @@ const confirm = () => {
 			...reactiveOmit(dataForm, "repeatPassword"),
 			id: userInfo.value.id,
 		};
-		loading.value = true;
-		handleApiConfirm(ApiUser.changePassword, data, "修改")
-			.then(() => {
-				passwordDialogVisible.value = false;
-			})
-			.finally(() => {
-				loading.value = false;
-			});
+		apiConfirm(data, "修改").then(() => {
+			passwordDialogVisible.value = false;
+		});
 	});
 };
 defineExpose({
@@ -84,7 +80,11 @@ defineExpose({
 				</el-form-item>
 			</el-form>
 			<template #footer>
-				<DialogFootButton @cancel="passwordDialogVisible = false" @confirm="confirm"></DialogFootButton>
+				<DialogFootButton
+					@cancel="passwordDialogVisible = false"
+					@confirm="confirm"
+					:loading="apiLoading"
+				></DialogFootButton>
 			</template>
 		</el-dialog>
 	</div>

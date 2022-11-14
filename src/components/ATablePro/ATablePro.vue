@@ -4,14 +4,13 @@
 <script setup lang="ts">
 import { ATableType } from "@/types/aTable";
 import ATable from "@/components/ATable/ATable.vue";
-import { TableRequestConfig, useTableRequest } from "@/hooks/useTableRequest";
+import { useTableRequest, useTableSearch } from "@/hooks";
 import { computed, provide, watch } from "vue";
-import { useTableSearch } from "@/hooks/useTableSearch";
 import ASearchForm from "@/components/ASearch/ASearchForm.vue";
 
 interface ATableProProps {
-	requestConfig: TableRequestConfig;
-	columns: ATableType.Column[];
+	requestConfig: ATableType.TableRequestConfig;
+	columns: ATableType.Column<any>[];
 	tableAttrs?: ATableType.TableAttrs;
 	tableEvent?: ATableType.TableEvent;
 }
@@ -30,7 +29,7 @@ const config = computed(() => {
 	return Object.assign({}, props.requestConfig, { searchParams });
 });
 // table 请求对应的 hook
-const { tableData, pagination, tableRequesting, fetchTableData, resetTablePagination } = useTableRequest(config.value);
+const { tableData, pagination, tableRequesting, fetchTableData } = useTableRequest(config.value);
 // 分页信息改变时重新请求
 watch([() => pagination.value.pageNo, () => pagination.value.pageSize], () => {
 	fetchTableData();
@@ -48,8 +47,8 @@ defineExpose({
 		:table-event="tableEvent"
 		:table-attrs="tableAttrs"
 	>
-		<template #head>
-			<ASearchForm :columns="searchColumns" @search="fetchTableData">
+		<template #search>
+			<ASearchForm v-if="searchColumns.length > 0" :columns="searchColumns" @search="fetchTableData">
 				<template #searchItem>
 					<slot name="searchItem"></slot>
 				</template>
@@ -60,6 +59,9 @@ defineExpose({
 					<slot name="searchButtonRight"></slot>
 				</template>
 			</ASearchForm>
+		</template>
+		<template #head>
+			<slot name="head"></slot>
 		</template>
 		<template #foot>
 			<el-pagination

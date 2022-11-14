@@ -15,12 +15,22 @@
 	:root {
 		--app-height-header: 60px;
 	}
-	.el-button {
-		background-color: var(--el-button-bg-color);
-	}
 	input:-internal-autofill-previewed,
 	input:-internal-autofill-selected {
 		transition: background-color 5000s ease-in-out 0s !important;
+	}
+	.el-button {
+		background-color: var(--el-button-bg-color);
+		&.is-text:not(.is-disabled):hover,
+		&.is-text:not(.is-disabled):focus {
+			background-color: var(--el-fill-color);
+		}
+	}
+	.el-input {
+		.el-input__inner::selection {
+			background-color: #3390ff;
+			color: #fff;
+		}
 	}
 }
 @layer components {

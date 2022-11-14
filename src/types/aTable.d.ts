@@ -2,6 +2,7 @@ import type { ElTable, ElTableColumn } from "element-plus";
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import { CamelCase } from "@/types/custom";
 import { AImage } from "@/types/aImage";
+import { HttpType } from "@/http/type/httpType";
 export namespace ATableType {
 	/**
 	 * ElTable 实例类型
@@ -64,7 +65,7 @@ export namespace ATableType {
 	 * 自定义渲染列的参数
 	 */
 	export interface ColumnRenderArg<T> {
-		aColumn: Column;
+		aColumn: Column<T>;
 		elColumn: TableColumnCtx<any>;
 		row: T;
 		$index?: number;
@@ -73,11 +74,11 @@ export namespace ATableType {
 	/**
 	 * 基础列
 	 */
-	interface ColumnBase {
+	interface ColumnBase<ROWDATA> {
 		/**
 		 * ElTableColumn 的 Props
 		 */
-		columnAttrs: ColumnAttrs;
+		columnAttrs: ColumnAttrs & { prop?: keyof ROWDATA | "operate" };
 		/**
 		 * 列的类型
 		 */
@@ -103,7 +104,7 @@ export namespace ATableType {
 		/**
 		 * 自定义列渲染函数
 		 */
-		renderColumn?: (scope: ColumnRenderArg) => any;
+		renderColumn?: (scope: ColumnRenderArg<ROWDATA>) => any;
 		/**
 		 * 自定义列表头渲染函数
 		 */
@@ -115,26 +116,33 @@ export namespace ATableType {
 	}
 
 	/**
-	 * 标签类型的列
-	 */
-	interface ColumnTag extends ColumnBase {
-		type: "tag";
-		// enums: EnumItem[];
-	}
-	interface ColumnImage extends ColumnBase {
-		type: "image";
-		imageConfig: AImage.Props;
-	}
-
-	/**
 	 * ATable 的 column 对象
 	 */
-	export type Column = ColumnBase | ColumnTag | ColumnImage;
+	export type Column<ROWDATA extends Record<string, any> = Record<string, any>> = ColumnBase<ROWDATA>;
 
-	export type Props = {
-		tableData: any[];
-		tableAttrs?: TableAttrs;
-		tableEvent?: TableEvent;
-		columns: Column[];
-	};
+	export interface TableRequestConfig<T extends (params: any) => Promise<any> = (params: any) => Promise<any>> {
+		requestApi: T;
+		/**
+		 * 是否是分页
+		 */
+		isPage: boolean;
+		/**
+		 * 是否立即请求
+		 */
+		immediately?: boolean;
+		/**
+		 * 请求的默认参数
+		 */
+		defaultParams?: Record<any, any>;
+		/**
+		 * 请求的搜索参数
+		 */
+		searchParams?: Record<any, any>;
+		/**
+		 * 拦截请求的钩子函数
+		 */
+		dataHook?: (
+			res: Awaited<ReturnType<T>>
+		) => HttpType.ResultData<any>;
+	}
 }

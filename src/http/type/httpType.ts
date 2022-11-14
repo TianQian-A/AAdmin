@@ -1,3 +1,5 @@
+import { AxiosRequestConfig } from "axios";
+
 export namespace HttpType {
 	/**
 	 * 统一错误信息
@@ -6,6 +8,13 @@ export namespace HttpType {
 		msg: string;
 		code?: number;
 	};
+	/**
+	 * 请求函数
+	 */
+	// export type ApiRequest<DATA, RESULT> = (data: DATA, config?: AxiosRequestConfig) => Promise<ResultData<RESULT>>;
+	export interface ApiRequest<DATA, RESULT> {
+		(data?: DATA, config?: AxiosRequestConfig): Promise<ResultData<RESULT>>;
+	}
 	/**
 	 * 请求响应 code 枚举
 	 */
@@ -28,8 +37,8 @@ export namespace HttpType {
 		data: T;
 	}
 
-	export type PageBaseParams = {
+	export interface PageBaseParams extends Record<any, any> {
 		pageNo?: number;
 		pageSize: number;
-	};
+	}
 }

@@ -3,7 +3,7 @@ import { ATableType } from "@/types/aTable";
 import { computed, inject } from "vue";
 
 interface Props {
-	columnItem: ATableType.Column;
+	columnItem: ATableType.Column<any>;
 }
 const props = withDefaults(defineProps<Props>(), {
 	columnItem: () => ({

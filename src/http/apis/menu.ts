@@ -1,4 +1,5 @@
 import { httpInstance } from "..";
+import { HttpType } from "../type/httpType";
 export namespace ApiMenu {
 	export interface ResMenuItem {
 		menuId: number;
@@ -15,7 +16,7 @@ export namespace ApiMenu {
 	 * @param data
 	 * @param data.mid 用户 id
 	 */
-	export function initMenu(data: { mid: number }) {
-		return httpInstance.post<ResMenu>("/user/menu/all", {}, { params: { mid: data.mid } });
-	}
+	export const initMenu: HttpType.ApiRequest<{ mid: number }, ResMenu> = (data) => {
+		return httpInstance.post("/user/menu/all", {}, { params: { mid: data.mid } });
+	};
 }

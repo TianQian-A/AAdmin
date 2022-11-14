@@ -23,7 +23,7 @@ const tableData = computed(() => {
 	};
 	return addLevel(dynamicMenuList.value);
 });
-const columns: ATableType.Column[] = [
+const columns: ATableType.Column<MenusWithLevel>[] = [
 	{
 		columnAttrs: {
 			type: "index",
@@ -35,6 +35,7 @@ const columns: ATableType.Column[] = [
 		columnAttrs: {
 			prop: "menuName",
 			label: "菜单名称",
+			align: "left",
 		},
 	},
 	{
@@ -44,7 +45,7 @@ const columns: ATableType.Column[] = [
 			label: "级别",
 		},
 		renderColumn(scope) {
-			return <el-tag type={scope.row.level > 1 ? "warning" : "primary"}>{scope.row.level} 级</el-tag>;
+			return <el-tag type={scope.row.level > 1 ? "warning" : ""}>{scope.row.level} 级</el-tag>;
 		},
 	},
 ];

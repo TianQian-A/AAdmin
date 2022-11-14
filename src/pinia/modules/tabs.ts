@@ -55,6 +55,8 @@ export const useStoreTabs = defineStore(
 		};
 	},
 	{
-		persist: true,
+		persist: {
+			storage: sessionStorage,
+		},
 	}
 );

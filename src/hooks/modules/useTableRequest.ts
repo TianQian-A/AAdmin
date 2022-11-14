@@ -1,34 +1,12 @@
 import { computed, onMounted, reactive, toRefs } from "vue";
 import { objectPick } from "@vueuse/core";
+import { ATableType } from "@/types/aTable";
 const DEFAULT_PAGINATION = {
 	pageNo: 1,
 	pageSize: 20,
 	total: 0,
 };
-export interface TableRequestConfig {
-	requestApi: (params: any) => Promise<any>;
-	/**
-	 * 是否是分页
-	 */
-	isPage: boolean;
-	/**
-	 * 是否立即请求
-	 */
-	immediately?: boolean;
-	/**
-	 * 请求的默认参数
-	 */
-	defaultParams?: Record<any, any>;
-	/**
-	 * 请求的搜索参数
-	 */
-	searchParams?: Record<any, any>;
-	/**
-	 * 拦截请求的钩子函数
-	 */
-	dataHook?: (res: Awaited<ReturnType<TableRequestConfig["requestApi"]>>) => ReturnType<TableRequestConfig["requestApi"]>;
-}
-export const useTableRequest = (config: TableRequestConfig) => {
+export const useTableRequest = (config: ATableType.TableRequestConfig) => {
 	const data = reactive({
 		// 表格数据
 		tableData: [],
@@ -55,10 +33,10 @@ export const useTableRequest = (config: TableRequestConfig) => {
 		data.tableRequesting = true;
 		config
 			.requestApi(requestParams.value)
-			.then((res) => {
+			.then((res: any) => {
 				config.dataHook && (res = config.dataHook(res));
-				data.tableData = res.data.list;
-				if (config.isPage) setPaginationTotal(res.data.total);
+				data.tableData = res.data;
+				if (config.isPage) setPaginationTotal(res.totalCount);
 			})
 			.finally(() => {
 				data.tableRequesting = false;

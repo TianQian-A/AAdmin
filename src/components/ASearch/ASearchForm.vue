@@ -26,4 +26,10 @@ const resetSearchParams = inject("clearSearchParams");
 		</ElFormItem>
 	</ElForm>
 </template>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-form {
+	:deep(.el-form-item) {
+		@apply mb-2;
+	}
+}
+</style>

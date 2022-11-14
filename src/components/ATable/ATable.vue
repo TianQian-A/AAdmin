@@ -7,7 +7,7 @@ interface ATableProps {
 	tableData: any[];
 	tableAttrs?: ATableType.TableAttrs;
 	tableEvent?: ATableType.TableEvent;
-	columns: ATableType.Column[];
+	columns: ATableType.Column<any>[];
 }
 withDefaults(defineProps<ATableProps>(), {
 	tableData: () => [],
@@ -24,9 +24,12 @@ const matchEnum = (row: any, aColumn: ATableType.Column) => {
 </script>
 <template>
 	<div class="table-wrap">
-		<slot name="head"></slot>
+		<slot name="search"></slot>
+		<div class="tabel-head">
+			<slot name="head"></slot>
+		</div>
 		<ElTable ref="elTableRef" :data="tableData" border v-bind="tableAttrs" v-on="tableEvent">
-			<ElTableColumn v-for="(aColumn, index) in columns" :key="index" v-bind="aColumn.columnAttrs">
+			<ElTableColumn v-for="(aColumn, index) in columns" :key="index" align="center" v-bind="aColumn.columnAttrs">
 				<template
 					v-if="aColumn.columnAttrs.type !== 'index' && aColumn.columnAttrs.type !== 'selection'"
 					#default="{ row, column: elColumn }"
@@ -67,6 +70,12 @@ const matchEnum = (row: any, aColumn: ATableType.Column) => {
 <style lang="scss" scoped>
 .table-wrap {
 	@apply flex flex-1 flex-col h-full;
+	.tabel-head {
+		@apply mb-2;
+		&:empty {
+			@apply hidden;
+		}
+	}
 	.el-table {
 		height: 100%;
 	}

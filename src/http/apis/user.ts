@@ -1,4 +1,5 @@
 import { httpInstance } from "@/http";
+import { HttpType } from "../type/httpType";
 export namespace ApiUser {
 	export interface ReqLoginPassword {
 		account: string;
@@ -17,13 +18,13 @@ export namespace ApiUser {
 	/**
 	 * 用户登录
 	 */
-	export function login(data: ReqLoginPassword) {
-		return httpInstance.post<ResLogin>("/login", data);
-	}
+	export const login: HttpType.ApiRequest<ReqLoginPassword, ResLogin> = (data) => {
+		return httpInstance.post("/login", data);
+	};
 	/**
 	 * 修改密码
 	 */
-	export function changePassword(data: ReqChangePassword) {
+	export const changePassword: HttpType.ApiRequest<ReqChangePassword, any> = (data) => {
 		return httpInstance.post("/user/update/password", data);
-	}
+	};
 }
