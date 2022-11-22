@@ -10,3 +10,19 @@ declare module "*.vue" {
 	const Component: ReturnType<typeof defineComponent>;
 	export default Component;
 }
+
+declare module "@wangeditor/editor" {
+	import { SlateDescendant, SlateElement, SlateText } from "@wangeditor/editor";
+	// 扩展 Text
+	interface SlateText {
+		text: string;
+	}
+
+	// 扩展 Element
+	interface SlateElement {
+		type: string;
+		children: SlateDescendant[];
+	}
+}
+
+declare module "nprogress";

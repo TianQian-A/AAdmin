@@ -17,6 +17,6 @@ export namespace ApiMenu {
 	 * @param data.mid 用户 id
 	 */
 	export const initMenu: HttpType.ApiRequest<{ mid: number }, ResMenu> = (data) => {
-		return httpInstance.post("/user/menu/all", {}, { params: { mid: data.mid } });
+		return httpInstance.post("/user/menu/all", {}, { params: { mid: data?.mid } });
 	};
 }

@@ -17,7 +17,7 @@ export const useBasicForm = <T extends Record<string, any>>(dataFormTemplate: Da
 	// 操作框是否展示
 	const dialogVisible = ref(false);
 	// 默认的表单数据，可用于重置表单
-	const defaultDataForm = {} as T;
+	const defaultDataForm = {} as Required<T>;
 	// 表单的规则
 	const formRules: FormRules = {};
 	// 处理 dataFormTemplate，初始化表单数据以及规则
@@ -25,7 +25,7 @@ export const useBasicForm = <T extends Record<string, any>>(dataFormTemplate: Da
 		if (has(dataFormTemplate, key)) {
 			const element = dataFormTemplate[key];
 			defaultDataForm[key] = element.value;
-			if (element.rules) formRules[key] = element.rules;
+			if (element.rules) formRules[key] = { required: true, ...element.rules };
 		}
 	}
 	// 实时变化的表单数据

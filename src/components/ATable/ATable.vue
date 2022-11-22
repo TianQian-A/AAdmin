@@ -49,7 +49,8 @@ const matchEnum = (row: any, aColumn: ATableType.Column) => {
 							</template>
 							<!-- 图片样式 -->
 							<template v-else-if="aColumn.type === 'image'">
-								<AImage :url="aColumn.imageConfig!.url" v-bind="aColumn.imageConfig"></AImage>
+								<!-- TODO: 修改 imageConfig 兼容函数，以指定 url  -->
+								<AImage :url="row[aColumn?.columnAttrs?.prop || ''] || ''" v-bind="aColumn.imageConfig"></AImage>
 							</template>
 							<!-- 普通文本，支持 enum -->
 							<template v-else>

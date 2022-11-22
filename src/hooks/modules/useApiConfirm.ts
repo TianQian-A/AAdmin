@@ -7,7 +7,11 @@ import { ref } from "vue";
  *  2. apiLoading: 是否正在请求
  * @param api 操作的 api
  */
-export const useApiConfirm = <T extends (data: any, config?: AxiosRequestConfig) => Promise<any>>(api: T) => {
+export const useApiConfirm = <T extends (data: any, config?: AxiosRequestConfig) => Promise<any>>(
+	api: T,
+	suucessCall?: () => void,
+	failCall?: () => void
+) => {
 	const apiLoading = ref(false);
 	const apiConfirm = (
 		data: Parameters<T>[0],
@@ -23,10 +27,12 @@ export const useApiConfirm = <T extends (data: any, config?: AxiosRequestConfig)
 				return api(data, config)
 					.then((res) => {
 						ElMessage.success(`${confirmText}成功`);
+						suucessCall && suucessCall();
 						return res;
 					})
 					.catch((err) => {
 						// ElMessage.error(err.msg);
+						failCall && failCall();
 						throw err;
 					});
 			})

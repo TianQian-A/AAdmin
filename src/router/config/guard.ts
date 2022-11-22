@@ -1,7 +1,10 @@
 import { NavigationGuardWithThis } from "vue-router";
 import { useCookies } from "@vueuse/integrations/useCookies";
 import { useStoreMenu } from "@/pinia/modules/menu";
+import NProgress from "./progress";
+
 export const guardBeforeEach: NavigationGuardWithThis<undefined> = async (to, from, next) => {
+	NProgress.start();
 	const menuStore = useStoreMenu();
 	console.log(to);
 	// 登录页面不拦截

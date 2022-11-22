@@ -7,14 +7,20 @@ import UserRoleDialog from "./components/UserRoleDialog.vue";
 import { useApiConfirm } from "@/hooks";
 import { reactiveOmit } from "@vueuse/core";
 import UserEditDialog from "./components/UserEditDialog.vue";
+import ATableBasicButtonVue from "@/components/ATableBasicButton/ATableBasicButton.vue";
 
 const tableRef = ref<null | InstanceType<typeof ATablePro>>(null);
+// 分配角色对话框
+const roleRef: Ref<null | InstanceType<typeof UserRoleDialog>> = ref(null);
+// 编辑用户对话框
+const modifyRef: Ref<null | InstanceType<typeof UserEditDialog>> = ref(null);
+
 const requestConfig: ATableType.TableRequestConfig<typeof ApiSysUser.list> = {
 	requestApi: ApiSysUser.list,
 	isPage: true,
 };
 // 删除用户请求 hook
-const { apiConfirm: delApiConfirm } = useApiConfirm(ApiSysUser.del);
+const { apiConfirm: delApiConfirm } = useApiConfirm(ApiSysUser.del, () => tableRef.value?.fetchTableData());
 const columns: ATableType.Column<ApiSysUser.ResUserItem>[] = [
 	{
 		columnAttrs: {
@@ -72,46 +78,25 @@ const columns: ATableType.Column<ApiSysUser.ResUserItem>[] = [
 			width: 280,
 		},
 		renderColumn({ row }) {
-			return renderOperate(row);
+			return (
+				<ATableBasicButtonVue
+					onDelete={() => delApiConfirm(row.id, "删除")}
+					onEdit={() => {
+						modifyRef.value?.show(row);
+					}}
+				>
+					{{
+						after: () => (
+							<el-button type="warning" link icon="User" onClick={() => roleRef.value?.show(row)}>
+								赋予角色
+							</el-button>
+						),
+					}}
+				</ATableBasicButtonVue>
+			);
 		},
 	},
 ];
-// 分配角色对话框
-const roleRef: Ref<null | InstanceType<typeof UserRoleDialog>> = ref(null);
-// 编辑用户对话框
-const modifyRef: Ref<null | InstanceType<typeof UserEditDialog>> = ref(null);
-// 操作单元格元素
-const renderOperate = (row: ApiSysUser.ResUserItem) => {
-	return (
-		<div>
-			<el-button
-				type="primary"
-				link
-				icon="Edit"
-				onClick={() => {
-					modifyRef.value?.show(row);
-				}}
-			>
-				编辑
-			</el-button>
-			<el-button
-				type="danger"
-				link
-				icon="Delete"
-				onClick={() =>
-					delApiConfirm(row.id, "删除").then(() => {
-						tableRef.value?.fetchTableData();
-					})
-				}
-			>
-				删除
-			</el-button>
-			<el-button type="warning" link icon="User" onClick={() => roleRef.value?.show(row)}>
-				赋予角色
-			</el-button>
-		</div>
-	);
-};
 </script>
 <template>
 	<div class="h-full">

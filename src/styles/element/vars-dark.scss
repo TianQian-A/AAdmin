@@ -3,26 +3,29 @@
 // */
 @use "element-plus/theme-chalk/dark/css-vars.css";
 @mixin set-css-var($list) {
-  @each $name, $variables in $list {
-      @each $attribute, $value in $variables {
-        @if $attribute == 'default' {
-          --el-#{$name}: #{$value};
-        } @else {
-          --el-#{$name}-#{$attribute}: #{$value};
-        }
-      }
-  }
+	@each $name, $variables in $list {
+		.el-#{$name} {
+			@each $attribute, $value in $variables {
+				@if $attribute == "default" {
+					--el-#{$name}: #{$value};
+				} @else {
+					--el-#{$name}-#{$attribute}: #{$value};
+				}
+			}
+		}
+	}
 }
 $var-list: (
-        menu: (
-                'text-color': #FFF,
-                'bg-color': #313640,
-                'hover-bg-color': mix( #FFF, #313640, 10 ),
-        ),
+	menu: (
+		"text-color": #fff,
+		"bg-color": #313640,
+		"hover-bg-color": mix(#fff, #313640, 10),
+	),
+	table: (
+		"header-bg-color": #252626,
+		"fixed-right-column": inset -10px 0 10px -10px rgba(0, 0, 0, 1),
+	),
 );
 html.dark {
-  @include set-css-var($var-list);
-  .el-table {
-    --el-table-header-bg-color: #252626;
-  }
+	@include set-css-var($var-list);
 }

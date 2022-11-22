@@ -1,11 +1,11 @@
 <script setup lang="tsx">
-import ATableBasicButtonVue from "@/components/ATableBasicButton/ATableBasicButton.vue";
+import ATableBasicButton from "@/components/ATableBasicButton/ATableBasicButton.vue";
 import { ApiRole } from "@/http/apis/role";
 import { ATableType } from "@/types/aTable";
 import { useBasicForm, useApiConfirm } from "@/hooks";
 import { Ref, ref } from "vue";
-import ATablePro from "@/components/ATablePro/ATablePro.vue";
-import { ElForm, ElMessage } from "element-plus";
+import type ATablePro from "@/components/ATablePro/ATablePro.vue";
+import type { ElForm } from "element-plus";
 import { reactiveOmit } from "@vueuse/core";
 import RoleMenuEditDrawer from "./components/RoleMenuEditDrawer.vue";
 
@@ -20,7 +20,7 @@ const tableRequestConfig: ATableType.TableRequestConfig<typeof ApiRole.list> = {
 };
 
 // 删除角色请求
-const { apiConfirm: delApiConfirm } = useApiConfirm(ApiRole.del);
+const { apiConfirm: delApiConfirm } = useApiConfirm(ApiRole.del, () => tableRef.value?.fetchTableData());
 // 增加或编辑角色请求
 const { apiConfirm: modifyApiConfirm, apiLoading: modifyApiLoading } = useApiConfirm(ApiRole.modify);
 // 角色增删表单数据
@@ -102,12 +102,8 @@ const columns: ATableType.Column<ApiRole.ResRoleItem>[] = [
 		},
 		renderColumn({ row }) {
 			return (
-				<ATableBasicButtonVue
-					onDelete={() => {
-						delApiConfirm(row.id).then(() => {
-							tableRef.value?.fetchTableData();
-						});
-					}}
+				<ATableBasicButton
+					onDelete={() => delApiConfirm(row.id, "删除")}
 					onEdit={() => {
 						showDialog(row);
 					}}
@@ -119,7 +115,7 @@ const columns: ATableType.Column<ApiRole.ResRoleItem>[] = [
 							</el-button>
 						),
 					}}
-				</ATableBasicButtonVue>
+				</ATableBasicButton>
 			);
 		},
 	},

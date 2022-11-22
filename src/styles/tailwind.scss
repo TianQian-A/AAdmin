@@ -19,6 +19,8 @@
 	input:-internal-autofill-selected {
 		transition: background-color 5000s ease-in-out 0s !important;
 	}
+
+	// 解决和预设样式冲突
 	.el-button {
 		background-color: var(--el-button-bg-color);
 		&.is-text:not(.is-disabled):hover,
@@ -26,6 +28,7 @@
 			background-color: var(--el-fill-color);
 		}
 	}
+	// 修复 input 选择时的样式问题
 	.el-input {
 		.el-input__inner::selection {
 			background-color: #3390ff;
@@ -39,5 +42,61 @@
 	}
 	.flex-center-between {
 		@apply flex justify-between items-center;
+	}
+
+	.a-pic-select {
+		@apply relative flex-center w-[120px] h-[120px] select-none;
+		@apply rounded-lg border;
+		border-color: var(--el-border-color-darker);
+		color: var(--el-text-color-secondary);
+		& :deep(.el-image) .el-image__inner {
+			@apply cursor-zoom-in rounded-lg;
+		}
+		&:hover > &-trash {
+			@apply flex;
+		}
+		&.empty {
+			@apply border-dashed;
+			& > label > i {
+				@apply cursor-pointer;
+			}
+			&:hover {
+				border-color: var(--el-color-primary);
+				color: var(--el-color-primary);
+			}
+		}
+		&-trash {
+			@apply flex items-end justify-start cursor-pointer;
+			@apply absolute right-[-2px] top-[-2px] z-[1] hidden;
+			@apply w-8 h-8 box-border pl-2 pb-2;
+			@apply rounded-bl-2xl rounded-tr-lg bg-red-500;
+			@apply transition-transform origin-top-right;
+			&:hover {
+				@apply scale-110 transform;
+			}
+		}
+	}
+
+	.map-box {
+		.el-dialog {
+			@apply flex flex-col;
+			.el-dialog__body {
+				height: 100%;
+				padding: 0;
+			}
+		}
+		.map-operate {
+			@apply absolute z-[1] right-4 top-2;
+			@apply h-full box-border pb-6;
+			@apply flex flex-col;
+			&-item {
+				@apply flex flex-col relative;
+				@apply shadow-lg bg-white dark:bg-[#121212] rounded-lg;
+				@apply w-72 box-border p-3;
+				&:not(:last-child) {
+					@apply mb-2;
+				}
+			}
+		}
 	}
 }

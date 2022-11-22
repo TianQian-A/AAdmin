@@ -2,7 +2,7 @@
 	配合 popover 封装的图片组件
 -->
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { AImage } from "@/types/aImage";
 
 interface AImageProps extends AImage.Props {
@@ -18,8 +18,6 @@ const props = withDefaults(defineProps<AImageProps>(), {
 	popoverMaxHeight: 400,
 	popoverMaxWidth: 400,
 });
-const aImage = ref();
-const popoverRef = ref();
 const oOops = () => {};
 const fullUrl = computed(() => import.meta.env.VITE_IMAGE_URL + props.url);
 const imageSizeStyle = computed(() => `width: ${props.size}px;height: ${props.size}px;`);
@@ -29,25 +27,33 @@ const popImageSizeStyle = computed(
 </script>
 <template>
 	<div>
-		<ElPopover
-			v-if="props.enablePopover"
-			ref="popoverRef"
-			:virtual-ref="aImage"
-			trigger="hover"
-			placement="right"
-			width="200"
-		>
-			<ElImage :src="fullUrl" :style="popImageSizeStyle"></ElImage>
-		</ElPopover>
-		<ElImage
-			ref="aImage"
-			:src="fullUrl"
-			fit="cover"
-			:preview-src-list="[fullUrl]"
-			:style="imageSizeStyle"
-			:preview-teleported="true"
-			@click.stop="oOops"
-		></ElImage>
+		<template v-if="props.enablePopover">
+			<ElPopover trigger="hover" width="200">
+				<el-image :src="fullUrl" :style="popImageSizeStyle"></el-image>
+				<template #reference>
+					<el-image
+						:src="fullUrl"
+						fit="cover"
+						:preview-src-list="[fullUrl]"
+						:style="imageSizeStyle"
+						:preview-teleported="true"
+						@click.stop="oOops"
+					>
+					</el-image>
+				</template> </ElPopover
+		></template>
+		<template v-else>
+			<el-image
+				ref="aImage"
+				:src="fullUrl"
+				fit="cover"
+				:preview-src-list="[fullUrl]"
+				:style="imageSizeStyle"
+				:preview-teleported="true"
+				@click.stop="oOops"
+			>
+			</el-image>
+		</template>
 	</div>
 </template>
 <style lang="scss" scoped></style>

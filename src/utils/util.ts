@@ -30,3 +30,37 @@ export const findEnum = (value: any, enums: ATableType.EnumItem[]): ATableType.E
 	}
 	return res;
 };
+
+/**
+ * 字符串数字回显
+ * @param strArr 字符串数组
+ * @param separate 分隔符
+ * @returns {String[]}
+ */
+export const strArrReplay = (strArr: string, separate = ",") => {
+	return strArr.split(separate).filter((item) => !!item);
+};
+/**
+ * 字符串数组添加
+ * @param strArr 字符串数组
+ * @param value 添加的字符串
+ * @param seperate 分隔符
+ * @returns {String}
+ */
+export const strArrAdd = (strArr: string, value: string, seperate = ",") => {
+	console.log("~~~", strArr, value, strArrReplay(strArr, seperate).concat([value]));
+
+	return strArrReplay(strArr, seperate).concat([value]).join(seperate);
+};
+/**
+ * 字符串数组删除
+ * @param strArr 字符串数组
+ * @param value 删除的字符串
+ * @param seperate 分隔符
+ * @returns {String}
+ */
+export const strArrRemove = (strArr: string, value: string, seperate = ",") => {
+	return strArrReplay(strArr, seperate)
+		.filter((item) => item !== value)
+		.join(seperate);
+};

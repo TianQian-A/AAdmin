@@ -56,7 +56,7 @@ export namespace ATableType {
 	export type EnumItem = {
 		label: string;
 		value: string | number;
-		tagType?: "danger" | "success" | "primary" | "warning" | "info";
+		tagType?: "danger" | "success" | "warning" | "info";
 	};
 	type ColumnType = "tag" | "image";
 	type ColumnSearchType = "input" | "select";
@@ -66,7 +66,7 @@ export namespace ATableType {
 	 */
 	export interface ColumnRenderArg<T> {
 		aColumn: Column<T>;
-		elColumn: TableColumnCtx<any>;
+		elColumn: TableColumnCtx<T>;
 		row: T;
 		$index?: number;
 	}

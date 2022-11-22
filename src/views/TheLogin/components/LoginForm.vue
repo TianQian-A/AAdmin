@@ -34,6 +34,7 @@ const submit = () => {
 				type="password"
 				show-password
 				placeholder="输入密码"
+				@keyup.enter="submit"
 				:prefix-icon="Lock"
 			/>
 		</el-form-item>
